@@ -1,0 +1,291 @@
+Exploring Prosper Loan Data by Pyari Singh K
+========================================================
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, packages}
+# Load all of the packages that you end up using in your analysis in this code
+# chunk.
+
+# Notice that the parameter "echo" was set to FALSE for this code chunk. This
+# prevents the code from displaying in the knitted HTML output. You should set
+# echo=FALSE for all code chunks in your file, unless it makes sense for your
+# report to show the code that generated a particular plot.
+
+# The other parameters for "message" and "warning" should also be set to FALSE
+# for other code chunks once you have verified that each plot comes out as you
+# want it to. This will clean up the flow of your report.
+
+library(ggplot2)
+```
+
+```{r echo=FALSE, Load_the_Data}
+# Load the Data
+prosperLoanData <- read.csv("prosperLoanData.csv")
+
+
+```
+
+> **Tip**: For the explore and summarise data project, the propserLoanData 
+data set is what I chose. The data set has 81 columns & 113937 observations.  
+
+# Univariate Plots Section
+
+> **Tip**: In this section, you should perform some preliminary exploration of
+your dataset. Run some summaries of the data and create univariate plots to
+understand the structure of the individual variables in your dataset. Don't
+forget to add a comment after each plot or closely-related group of plots!
+There should be multiple code chunks and text sections; the first one below is
+just to help you get started.
+
+```{r echo=FALSE, Univariate_Plots}
+ggplot(aes(x=LoanOriginalAmount),data=prosperLoanData)+geom_histogram()+ggtitle("Histogram for Loan Original Amount")
+meanLoanOriginalAmount <- mean(prosperLoanData$LoanOriginalAmount)
+medianLoanOriginalAmount <- median(prosperLoanData$LoanOriginalAmount)
+```
+
+
+Loan Original Amount has a positive skew. The mean value for the 
+LoanOriginalAmount is 8337 which is greater than the median. The median for the
+LoanOriginalAmount is 6500. 
+
+```{r echo=FALSE, Univariate_Plots_2}
+ggplot(aes(x=MonthlyLoanPayment),data=prosperLoanData)+geom_histogram(binwidth = 50)+
+  ggtitle("Histogram for Monthly Loan Payment")+coord_cartesian(xlim=c(0:1500))
+monthlyLoanPaymentMean <- mean(prosperLoanData$MonthlyLoanPayment)
+monthlyLoanPaymentMedian <- median(prosperLoanData$MonthlyLoanPayment) 
+```
+
+Monthly Loan Payment has a positive skew. The median is less than the mean for 
+this data. The median for the monthly Loan Payment is 217 and the mean is 272. 
+
+
+```{r echo=FALSE, Univariate_Plots_3}
+ggplot(aes(x=CreditScoreRangeLower),data=prosperLoanData)+geom_histogram(binwidth = 5)+
+  ggtitle("Histogram for Credit Score Range Lower") + xlim(400, 900)
+
+
+creditScoreRangeLower_na_removed<- na.omit(prosperLoanData$CreditScoreRangeLower)
+creditScoreRangeLowerMean <- mean(creditScoreRangeLower_na_removed)
+creditScoreRangeLowerMedian <- median(creditScoreRangeLower_na_removed) 
+```
+
+
+credit score range lower has a normal distribution. The mean/median in this case 
+is 685.56/680
+
+
+```{r echo=FALSE, Univariate_Plots_4, message = FALSE, warning= FALSE}
+ggplot(aes(x=BorrowerRate),data=prosperLoanData)+geom_histogram(binwidth = 0.01)+
+  ggtitle("Histogram for Borrower Rate")
+BorrowerRateMean <- mean(prosperLoanData$BorrowerRate)
+BorrowerRateMedian <- median(prosperLoanData$BorrowerRate) 
+```
+
+
+BorrowerRate also has a normal distribution and the mean/med ratio is 0.19/0.18
+However, there are various spikes especially between 0.24 and 0.31.
+
+
+```{r echo=FALSE, Univariate_Plots_5}
+ggplot(aes(x=DebtToIncomeRatio),data=prosperLoanData)+geom_histogram()+
+  ggtitle("Histogram for Debt to Income Ratio")+xlim(0,1.75)
+DIRatio_na_removed<- na.omit(prosperLoanData$DebtToIncomeRatio)
+DIRatioMean <- mean(DIRatio_na_removed)
+DIRatioMedian <- median(DIRatio_na_removed) 
+```
+
+
+Debt To Income Ratio exhibits a slight positive skew with mean > median. 
+Mean is 0.275 and median is 0.22. There is a strong observation here. DI ratio 
+is less than 0.5 for a good percentage of pepole. 
+
+
+
+```{r echo=FALSE, Univariate_Plots_5, warning=FALSE, message=FALSE}
+ggplot(aes(x=StatedMonthlyIncome),data=prosperLoanData)+geom_histogram()+
+  ggtitle("Histogram for Stated Monthly Income")+xlim(0,20000)
+#DIRatio_na_removed<- na.omit(prosperLoanData$StatedMonthlyIncome)
+StatedMonthlyIncomeMean <- mean(prosperLoanData$StatedMonthlyIncome)
+StatedMonthlyIncomeMedian <- median(prosperLoanData$StatedMonthlyIncome) 
+```
+
+
+Stated Monthly Income has a positive skew with mean > median. Mean for the 
+Stated Monthly Income is 5608 and the median is 4666. 
+
+
+```{r echo=FALSE, Univariate_Plots_5, warning=FALSE, message=FALSE}
+
+prosperLoanData$MonthlyDebtTotal <- prosperLoanData$DebtToIncomeRatio * 
+  prosperLoanData$StatedMonthlyIncome
+ggplot(aes(x=MonthlyDebtTotal),data=prosperLoanData)+geom_histogram()+
+  ggtitle("Histogram for Total Monthly Debt")+xlim(0,7500)
+TotalMonthlyDebt_na_removed<- na.omit(prosperLoanData$MonthlyDebtTotal)
+TotalMonthlyDebtMean <- mean(TotalMonthlyDebt_na_removed)
+TotalMonthlyDebtMedian <- median(TotalMonthlyDebt_na_removed) 
+summary(prosperLoanData$MonthlyDebtTotal)
+```
+
+
+MonthlyDebtTotal has been added as a new column. This was derived by multiplying
+the debt to Income Ratio to the stated Monthly Income. 
+
+Total Monthly debt has a positive skew on its histogram and the mean is greater 
+than the median. The mean is 1224. The median is 1061. The first quartile for 
+this data is 637 and the third quartile is 1622. 
+
+```{r echo=FALSE, Univariate_Plots_6, warning=FALSE, message=FALSE}
+
+
+ggplot(aes(x=EmploymentStatusDuration),data=prosperLoanData)+geom_histogram()+
+  ggtitle("Histogram for Employment Status Duration")+xlim(0,700)
+EmploymentStatusDuration_na_removed<- na.omit(prosperLoanData$EmploymentStatusDuration)
+EmploymentStatusDurationMean <- mean(EmploymentStatusDuration_na_removed)
+EmploymentStatusDurationMedian <- median(EmploymentStatusDuration_na_removed) 
+
+```
+
+
+The Employment Status Duration exhibits a positive skew. The mean of the data is
+higher than the median. The mean is 96 and the median is 67. It is observed that
+more number of employees worked for shorter durations. 
+
+
+
+```{r echo=FALSE, Univariate_Plots_6, warning=FALSE, message=FALSE}
+
+
+ggplot(aes(x=CurrentCreditLines),data=prosperLoanData)+geom_histogram(binwidth = 1)+
+  ggtitle("Histogram for Current Credit Lines")+xlim(0,70)
+CurrentCreditLines_na_removed<- na.omit(prosperLoanData$CurrentCreditLines)
+CurrentCreditLinesMean <- mean(CurrentCreditLines_na_removed)
+CurrentCreditLinesMedian <- median(CurrentCreditLines_na_removed) 
+
+```
+
+
+Current Credit Lines has a slight positive skew. The mean/median ratio is 
+10.31/10. 
+
+> **Tip**: Make sure that you leave a blank line between the start / end of
+each code block and the end / start of your Markdown text so that it is
+formatted nicely in the knitted text. Note as well that text on consecutive
+lines is treated as a single space. Make sure you have a blank line between
+your paragraphs so that they too are formatted for easy readability.
+
+# Univariate Analysis
+
+> **Tip**: Now that you've completed your univariate explorations, it's time to
+reflect on and summarize what you've found. Use the questions below to help you
+gather your observations and add your own if you have other thoughts!
+
+### What is the structure of your dataset?
+
+### What is/are the main feature(s) of interest in your dataset?
+
+### What other features in the dataset do you think will help support your \
+investigation into your feature(s) of interest?
+
+### Did you create any new variables from existing variables in the dataset?
+
+### Of the features you investigated, were there any unusual distributions? \
+Did you perform any operations on the data to tidy, adjust, or change the form \
+of the data? If so, why did you do this?
+
+
+# Bivariate Plots Section
+
+> **Tip**: Based on what you saw in the univariate plots, what relationships
+between variables might be interesting to look at in this section? Don't limit
+yourself to relationships between a main output feature and one of the
+supporting variables. Try to look at relationships between supporting variables
+as well.
+
+```{r echo=FALSE, Bivariate_Plots}
+
+```
+
+# Bivariate Analysis
+
+> **Tip**: As before, summarize what you found in your bivariate explorations
+here. Use the questions below to guide your discussion.
+
+### Talk about some of the relationships you observed in this part of the \
+investigation. How did the feature(s) of interest vary with other features in \
+the dataset?
+
+### Did you observe any interesting relationships between the other features \
+(not the main feature(s) of interest)?
+
+### What was the strongest relationship you found?
+
+
+# Multivariate Plots Section
+
+> **Tip**: Now it's time to put everything together. Based on what you found in
+the bivariate plots section, create a few multivariate plots to investigate
+more complex interactions between variables. Make sure that the plots that you
+create here are justified by the plots you explored in the previous section. If
+you plan on creating any mathematical models, this is the section where you
+will do that.
+
+```{r echo=FALSE, Multivariate_Plots}
+
+```
+
+# Multivariate Analysis
+
+### Talk about some of the relationships you observed in this part of the \
+investigation. Were there features that strengthened each other in terms of \
+looking at your feature(s) of interest?
+
+### Were there any interesting or surprising interactions between features?
+
+### OPTIONAL: Did you create any models with your dataset? Discuss the \
+strengths and limitations of your model.
+
+------
+
+# Final Plots and Summary
+
+> **Tip**: You've done a lot of exploration and have built up an understanding
+of the structure of and relationships between the variables in your dataset.
+Here, you will select three plots from all of your previous exploration to
+present here as a summary of some of your most interesting findings. Make sure
+that you have refined your selected plots for good titling, axis labels (with
+units), and good aesthetic choices (e.g. color, transparency). After each plot,
+make sure you justify why you chose each plot by describing what it shows.
+
+### Plot One
+```{r echo=FALSE, Plot_One}
+
+```
+
+### Description One
+
+
+### Plot Two
+```{r echo=FALSE, Plot_Two}
+
+```
+
+### Description Two
+
+
+### Plot Three
+```{r echo=FALSE, Plot_Three}
+
+```
+
+### Description Three
+
+------
+
+# Reflection
+
+> **Tip**: Here's the final step! Reflect on the exploration you performed and
+the insights you found. What were some of the struggles that you went through?
+What went well? What was surprising? Make sure you include an insight into
+future work that could be done with the dataset.
+
+> **Tip**: Don't forget to remove this, and the other **Tip** sections before
+saving your final work and knitting the final report!
