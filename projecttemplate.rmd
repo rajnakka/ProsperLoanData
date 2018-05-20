@@ -16,6 +16,7 @@ Exploring Prosper Loan Data by Pyari Singh K
 
 library(ggplot2)
 library(lubridate)
+library(dplyr)
 ```
 
 ```{r echo=FALSE, Load_the_Data}
@@ -37,7 +38,7 @@ forget to add a comment after each plot or closely-related group of plots!
 There should be multiple code chunks and text sections; the first one below is
 just to help you get started.
 
-```{r echo=FALSE, Univariate_Plots}
+```{r echo=FALSE, Univariate_Plots_15, message = FALSE, warning= FALSE}
 ggplot(aes(x=LoanOriginalAmount),data=prosperLoanData)+geom_histogram()+ggtitle("Histogram for Loan Original Amount")
 meanLoanOriginalAmount <- mean(prosperLoanData$LoanOriginalAmount)
 medianLoanOriginalAmount <- median(prosperLoanData$LoanOriginalAmount)
@@ -48,7 +49,7 @@ Loan Original Amount has a positive skew. The mean value for the
 LoanOriginalAmount is 8337 which is greater than the median. The median for the
 LoanOriginalAmount is 6500. 
 
-```{r echo=FALSE, Univariate_Plots_2}
+```{r echo=FALSE, Univariate_Plots_16, message = FALSE, warning= FALSE}
 ggplot(aes(x=MonthlyLoanPayment),data=prosperLoanData)+geom_histogram(binwidth = 50)+
   ggtitle("Histogram for Monthly Loan Payment")+coord_cartesian(xlim=c(0:1500))
 monthlyLoanPaymentMean <- mean(prosperLoanData$MonthlyLoanPayment)
@@ -59,7 +60,7 @@ Monthly Loan Payment has a positive skew. The median is less than the mean for
 this data. The median for the monthly Loan Payment is 217 and the mean is 272. 
 
 
-```{r echo=FALSE, Univariate_Plots_3}
+```{r echo=FALSE, Univariate_Plots_17, message = FALSE, warning= FALSE}
 ggplot(aes(x=CreditScoreRangeLower),data=prosperLoanData)+geom_histogram(binwidth = 5)+
   ggtitle("Histogram for Credit Score Range Lower") + xlim(400, 900)
 
@@ -74,7 +75,7 @@ credit score range lower has a normal distribution. The mean/median in this case
 is 685.56/680
 
 
-```{r echo=FALSE, Univariate_Plots_4, message = FALSE, warning= FALSE}
+```{r echo=FALSE, Univariate_Plots_18, message = FALSE, warning= FALSE}
 ggplot(aes(x=BorrowerRate),data=prosperLoanData)+geom_histogram(binwidth = 0.01)+
   ggtitle("Histogram for Borrower Rate")
 BorrowerRateMean <- mean(prosperLoanData$BorrowerRate)
@@ -86,7 +87,7 @@ BorrowerRate also has a normal distribution and the mean/med ratio is 0.19/0.18
 However, there are various spikes especially between 0.24 and 0.31.
 
 
-```{r echo=FALSE, Univariate_Plots_5}
+```{r echo=FALSE, Univariate_Plots_19, message=FALSE, warning=FALSE}
 ggplot(aes(x=DebtToIncomeRatio),data=prosperLoanData)+geom_histogram()+
   ggtitle("Histogram for Debt to Income Ratio")+xlim(0,1.75)
 DIRatio_na_removed<- na.omit(prosperLoanData$DebtToIncomeRatio)
@@ -101,7 +102,7 @@ is less than 0.5 for a good percentage of pepole.
 
 
 
-```{r echo=FALSE, Univariate_Plots_5, warning=FALSE, message=FALSE}
+```{r echo=FALSE, Univariate_Plots_20, warning=FALSE, message=FALSE}
 ggplot(aes(x=StatedMonthlyIncome),data=prosperLoanData)+geom_histogram()+
   ggtitle("Histogram for Stated Monthly Income")+xlim(0,20000)
 #DIRatio_na_removed<- na.omit(prosperLoanData$StatedMonthlyIncome)
@@ -114,7 +115,7 @@ Stated Monthly Income has a positive skew with mean > median. Mean for the
 Stated Monthly Income is 5608 and the median is 4666. 
 
 
-```{r echo=FALSE, Univariate_Plots_5, warning=FALSE, message=FALSE}
+```{r echo=FALSE, Univariate_Plots_21, warning=FALSE, message=FALSE}
 
 prosperLoanData$MonthlyDebtTotal <- prosperLoanData$DebtToIncomeRatio * 
   prosperLoanData$StatedMonthlyIncome
@@ -134,7 +135,7 @@ Total Monthly debt has a positive skew on its histogram and the mean is greater
 than the median. The mean is 1224. The median is 1061. The first quartile for 
 this data is 637 and the third quartile is 1622. 
 
-```{r echo=FALSE, Univariate_Plots_6, warning=FALSE, message=FALSE}
+```{r echo=FALSE, Univariate_Plots_22, warning=FALSE, message=FALSE}
 
 
 ggplot(aes(x=EmploymentStatusDuration),data=prosperLoanData)+geom_histogram()+
@@ -152,7 +153,7 @@ more number of employees worked for shorter durations.
 
 
 
-```{r echo=FALSE, Univariate_Plots_6, warning=FALSE, message=FALSE}
+```{r echo=FALSE, Univariate_Plots_9, warning=FALSE, message=FALSE}
 
 
 ggplot(aes(x=CurrentCreditLines),data=prosperLoanData)+geom_histogram(binwidth = 1)+
@@ -169,7 +170,7 @@ Current Credit Lines has a slight positive skew. The mean/median ratio is
 
 
 
-```{r echo=FALSE, Univariate_Plots_6, warning=FALSE, message=FALSE}
+```{r echo=FALSE, Univariate_Plots_10, warning=FALSE, message=FALSE}
 #using lubridate and extracting the month and year from the loan Origination Date
 prosperLoanData$date <- ymd_hms(prosperLoanData$LoanOriginationDate)
 prosperLoanData$LoanMonth <- factor(month(prosperLoanData$date))
@@ -184,7 +185,7 @@ ggplot(aes(x=LoanMonth),data=prosperLoanData)+geom_bar()+
 
 Loans originate mostly during October, December and January
 
-```{r echo=FALSE, Univariate_Plots_6, warning=FALSE, message=FALSE}
+```{r echo=FALSE, Univariate_Plots_11, warning=FALSE, message=FALSE}
 ggplot(aes(x=LoanYear),data=prosperLoanData)+geom_bar()+
   ggtitle("Loan Origination - Yearly")
 ```
@@ -192,6 +193,84 @@ ggplot(aes(x=LoanYear),data=prosperLoanData)+geom_bar()+
 
 During the year 2009, there was a drop. This can be attributed to the economic 
 crisis during that year. 
+
+```{r echo=FALSE, Univariate_Plots_12, warning=FALSE, message=FALSE}
+table(prosperLoanData$LoanStatus)
+```
+
+
+Most of the loans are either in the completed status or in current status. 
+
+
+```{r echo=FALSE, Univariate_Plots_23, warning=FALSE, message=FALSE}
+summary(prosperLoanData$IncomeRange)
+```
+
+Most of the loans are taken by people with income range between 25k USD to 
+50k USD and 50k to 75k USD. 
+
+```{r echo=FALSE, Univariate_Plots_13, warning=FALSE, message=FALSE}
+summary(prosperLoanData$Term)
+table(prosperLoanData$Term)
+```
+
+
+Most of the loans are of duration 36 months (3 years)
+
+```{r echo=FALSE, Univariate_Plots_14, warning=FALSE, message=FALSE}
+prosperLoanData_na_omitted <- na.omit(prosperLoanData)
+top_10_states <- prosperLoanData_na_omitted  %>% group_by(BorrowerState) %>% 
+  summarise(count=n()) %>% arrange(desc(count)) %>% top_n(10)
+
+
+ggplot(aes(x=BorrowerState, y = count),data=top_10_states)+
+  geom_bar(stat="identity")+
+  ggtitle("Borrower State Vs count - Bar Chart for the top 10 states")
+```
+
+
+Top 10 states by the number of borrowers were plotted and this the state 
+California topped the list. 
+
+
+```{r echo=FALSE, Univariate_Plots_Occupation, warning=FALSE, message=FALSE}
+top_7_occupations <- prosperLoanData_na_omitted  %>% group_by(Occupation) %>% 
+  summarise(count=n()) %>% arrange(desc(count)) %>% top_n(7)
+
+
+ggplot(aes(x=Occupation, y = count),data=top_7_occupations)+
+  geom_bar(stat="identity")+
+  ggtitle("Occupation Vs count - Bar Chart for the top 7 occupations")
+```
+
+
+Since the most of the loans belonged to the category of "Other", the data is not
+fully sufficient to analyse people with what kind of occupation go for the 
+highest loans. 
+
+
+```{r echo=FALSE, Univariate_Plots_HomeBuyer, warning=FALSE, message=FALSE}
+print("Borrowers - Are they home owners?")
+summary(prosperLoanData$IsBorrowerHomeowner)
+```
+
+Almost 50% of the borrowers are home owners
+
+
+```{r echo=FALSE, Univariate_Plots_Employment Status, warning=FALSE, message=FALSE}
+top_7_occupations <- prosperLoanData_na_omitted  %>% group_by(Occupation) %>% 
+  summarise(count=n()) %>% arrange(desc(count)) %>% top_n(7)
+
+
+ggplot(aes(x=EmploymentStatus),data=prosperLoanData)+
+  geom_bar()+
+  ggtitle("Employment Status - Histogram")
+```
+
+
+Employment Status data doesnt seem to be complete. Also, as anticipated, the 
+employed categroy go for the highest number of loans. 
+
 
 > **Tip**: Make sure that you leave a blank line between the start / end of
 each code block and the end / start of your Markdown text so that it is
@@ -227,11 +306,21 @@ yourself to relationships between a main output feature and one of the
 supporting variables. Try to look at relationships between supporting variables
 as well.
 
-```{r echo=FALSE, Bivariate_Plots}
+
+# Bivariate Analysis
+
+```{r echo=FALSE, Bivariate_Plots_CurrentCreditLines_And_Total_Monthly_Debt}
+ggplot(aes(x=CurrentCreditLines, y=MonthlyDebtTotal),data=prosperLoanData)+
+  geom_point(alpha=0.5,position="jitter")+xlim(0,30)+ylim(0,10000)
+  ggtitle("Current Credit Lines Vs Total Monthly Debt")
+  corCoef = cor.test(prosperLoanData$CurrentCreditLines,
+                     prosperLoanData$MonthlyDebtTotal,method="pearson")
 
 ```
 
-# Bivariate Analysis
+
+There is a clear positive correlation between Current CreditLines and the Total 
+Monthly Debt and the value of the correlation coeffient is 0.47.
 
 > **Tip**: As before, summarize what you found in your bivariate explorations
 here. Use the questions below to guide your discussion.
