@@ -26,8 +26,29 @@ prosperLoanData <- read.csv("prosperLoanData.csv")
 
 ```
 
+
+
 > **Tip**: For the explore and summarise data project, the propserLoanData 
 data set is what I chose. The data set has 81 columns & 113937 observations.  
+
+
+```{r}
+#converting the ListingCategory to factor variable & associating them 
+#for labeling purposes
+prosperLoanData$ListingCategory..numeric. <- 
+  factor(prosperLoanData$ListingCategory..numeric.)
+
+cats <- c('0 - Not Available', '1 - Debt Consolidation', 
+          '2 - Home Improvement', '3 - Business', '4 - Personal Loan', 
+          '5 - Student Use', '6 - Auto', '7- Other', '8 - Baby&Adoption', 
+          '9 - Boat', '10 - Cosmetic Procedure', '11 - Engagement Ring', 
+          '12 - Green Loans', '13 - Household Expenses', 
+          '14 - Large Purchases', '15 - Medical/Dental', '16 - Motorcycle', 
+          '17 - RV', '18 - Taxes', '19 - Vacation', '20 - Wedding Loans')
+#converting Term into a factor variable
+prosperLoanData$Term <- factor(prosperLoanData$Term)
+
+```
 
 # Univariate Plots Section
 
@@ -417,13 +438,67 @@ ggplot(data=prosperLoanData, aes(x=LoanYear,y=LoanOriginalAmount))+
   ggtitle("Loan Month And Loan Original Amount")
 
 
-ggplot(data=prosperLoanData, aes(x=LoanMonth, y=LoanOriginalAmount)) + geom_bar(stat='identity')
+ggplot(data=prosperLoanData, aes(x=LoanMonth, y=LoanOriginalAmount)) + 
+  geom_bar(stat='identity')
 
  
 ```
 
 Dec to Feb is the period when the loan amounts are usually higher. 
 
+```{r echo=FALSE, Bivariate_Plots_ListingCategory_And_LoanOriginalAmount}
+ggplot(data=prosperLoanData, aes(x=ListingCategory..numeric.,
+                                 y=LoanOriginalAmount, 
+                   fill=ListingCategory..numeric.,)) + 
+  geom_boxplot() + scale_fill_discrete(name="Loan Category", labels=cats) +
+  ggtitle("Loan Amount and Loan Category")
+```
+
+The higher amount loans are taken for Debt consolidation and baby and adoption
+
+```{r echo=FALSE, Bivariate_Plots_IncomeRange_And_LoanOriginalAmount}
+ggplot(data=prosperLoanData, aes(x=IncomeRange,y=LoanOriginalAmount, 
+                                 color=IncomeRange))+
+  geom_boxplot() + scale_x_discrete(labels="") +
+  ggtitle("Loan Amount and Income Range")
+```
+
+Borrowers with large incomes take large loan.
+
+
+```{r echo=FALSE, Bivariate_Plots_Employment_Status_And_LoanOriginalAmount}
+ggplot(data=subset(prosperLoanData, prosperLoanData$EmploymentStatus!=""), 
+       aes(x=EmploymentStatus, y=LoanOriginalAmount, color=EmploymentStatus)) +
+  geom_boxplot() + scale_x_discrete(labels="")+ggtitle("Employment Status and 
+                                                       Loan Amount")
+```
+
+Employed and Self employed are the ones who are taking higher loans
+
+
+```{r echo=FALSE, Bivariate_Plots_Term_And_LoanOriginalAmount}
+ggplot(data=prosperLoanData, aes(x=Term,y=LoanOriginalAmount))+ geom_boxplot()
+```
+
+Higher Loans Amounts are repaid thorough longer terms
+
+```{r echo=FALSE, Term_And_BorrowerRate, message=FALSE, warning=FALSE}
+ggplot(data=prosperLoanData, aes(x=Term,y=BorrowerRate))+ geom_boxplot()+
+  ggtitle("Term and Borrower Rate")
+```
+
+
+Higher the term of repayment does not always means that the interest rates are 
+higher. 
+
+
+```{r echo=FALSE, Term_And_CreditScores, message=FALSE, warning=FALSE}
+ggplot(data=prosperLoanData, aes(x=Term,y=CreditScoreRangeLower))+ 
+  geom_boxplot() + ggtitle("Term and Credit Scores")+ylim(300,750)
+```
+
+
+Term and Credit Scores - Not much insights can be drawn from this plot. 
 
 > **Tip**: As before, summarize what you found in your bivariate explorations
 here. Use the questions below to guide your discussion.
@@ -447,9 +522,45 @@ create here are justified by the plots you explored in the previous section. If
 you plan on creating any mathematical models, this is the section where you
 will do that.
 
-```{r echo=FALSE, Multivariate_Plots}
+```{r echo=FALSE, Scores_Amount_BorrowerRate, message=FALSE, warning=FALSE}
+
+
+ggplot(data=prosperLoanData, 
+       aes(x=LoanOriginalAmount, y=BorrowerRate, color=CreditScoreRangeLower)) +
+  geom_point(alpha=0.75, position='jitter') + 
+  scale_colour_gradient(low="blue", high="red") + 
+  ggtitle("Loan Amount by Credit Score and Interest Rate")
 
 ```
+
+The top left ones are the ones which takes loans for a smaller amount and at 
+higher rates. These are the borrowers with lower credit scores
+
+
+```{r echo=FALSE, MVP_2, message=FALSE, warning=FALSE}
+ggplot(data=subset(prosperLoanData, prosperLoanData$IncomeRange != '$0' & 
+                     prosperLoanData$IncomeRange != 'Not displayed'), 
+       aes(x=LoanYear, y= MonthlyLoanPayment/StatedMonthlyIncome, 
+           fill=IncomeRange)) +geom_boxplot() +ylim(0, 0.1) +
+  facet_wrap(~IncomeRange) + theme(axis.text.x = element_text(angle=90))
+```
+
+
+
+```{r echo=FALSE, MVP_2, message=FALSE, warning=FALSE}
+#ggplot(data=subset(prosperLoanData, prosperLoanData$IncomeRange != '$0' & 
+#                     prosperLoanData$IncomeRange != 'Not displayed'), 
+#       aes(x=LoanYear, y= MonthlyLoanPayment/StatedMonthlyIncome, 
+#           fill=IncomeRange)) +geom_boxplot() +ylim(0, 0.1) +
+#  facet_wrap(~IncomeRange) + theme(axis.text.x = element_text(angle=90))
+
+ggplot(data=subset(prosperLoanData, prosperLoanData$IncomeRange != '$0' & 
+                     prosperLoanData$IncomeRange != 'Not displayed'), 
+       aes(x=LoanYear, y= DebtToIncomeRatio, fill=IncomeRange)) +
+  geom_boxplot() +ylim(0, .5) +facet_wrap(~IncomeRange)+ 
+  theme(axis.text.x = element_text(angle=90))
+```
+
 
 # Multivariate Analysis
 
@@ -476,7 +587,7 @@ make sure you justify why you chose each plot by describing what it shows.
 
 ### Plot One
 ```{r echo=FALSE, Plot_One}
-
+ggplot(data=subset(prosperLoanData, prosperLoanData$CreditScoreRangeLower > 660), aes(x=BorrowerRate, y=LoanOriginalAmount, color=CreditScoreRangeLower)) +geom_point(alpha=0.1, position='jitter') + scale_colour_gradient(low="blue", high="red") +ggtitle("Loan Amount by Credit Score and Interest Rate") +facet_wrap(~LoanYear)
 ```
 
 ### Description One
@@ -484,6 +595,7 @@ make sure you justify why you chose each plot by describing what it shows.
 
 ### Plot Two
 ```{r echo=FALSE, Plot_Two}
+ggplot(data=subset(prosperLoanData, prosperLoanData$DebtToIncomeRatio < .4 ), aes(x=BorrowerRate, y=LoanOriginalAmount, color=DebtToIncomeRatio)) +geom_point(alpha=0.1, position='jitter') +facet_wrap(~LoanYear) + scale_colour_gradient(low="green", high="red") +ggtitle("Loan Amount by DI Ratio and Interest Rate") +xlim( 0, 0.4)
 
 ```
 
@@ -492,6 +604,9 @@ make sure you justify why you chose each plot by describing what it shows.
 
 ### Plot Three
 ```{r echo=FALSE, Plot_Three}
+delin <- prosperLoanData[grep("Past Due", prosperLoanData$LoanStatus),] # only delinquent
+
+ggplot(data=subset(delin, delin$IncomeRange != '$0'), aes(y=LoanYear, x=LoanStatus)) +geom_point(aes(color=LoanStatus),size=3, alpha=0.5, position='jitter') +facet_wrap(~IncomeRange) +ggtitle("Delinquent loan exposure summary") +scale_colour_brewer(type="div", palette="Dark2") +scale_x_discrete(labels="")
 
 ```
 
