@@ -22,13 +22,11 @@ library(dplyr)
 ```{r echo=FALSE, Load_the_Data}
 # Load the Data
 prosperLoanData <- read.csv("prosperLoanData.csv")
-
-
 ```
 
 
 
-> **Tip**: For the explore and summarise data project, the propserLoanData 
+For the explore and summarise data project, the propserLoanData 
 data set is what I chose. The data set has 81 columns & 113937 observations.  
 
 
@@ -45,6 +43,7 @@ cats <- c('0 - Not Available', '1 - Debt Consolidation',
           '12 - Green Loans', '13 - Household Expenses', 
           '14 - Large Purchases', '15 - Medical/Dental', '16 - Motorcycle', 
           '17 - RV', '18 - Taxes', '19 - Vacation', '20 - Wedding Loans')
+
 #converting Term into a factor variable
 prosperLoanData$Term <- factor(prosperLoanData$Term)
 
@@ -52,15 +51,10 @@ prosperLoanData$Term <- factor(prosperLoanData$Term)
 
 # Univariate Plots Section
 
-> **Tip**: In this section, you should perform some preliminary exploration of
-your dataset. Run some summaries of the data and create univariate plots to
-understand the structure of the individual variables in your dataset. Don't
-forget to add a comment after each plot or closely-related group of plots!
-There should be multiple code chunks and text sections; the first one below is
-just to help you get started.
-
 ```{r echo=FALSE, Univariate_Plots_15, message = FALSE, warning= FALSE}
-ggplot(aes(x=LoanOriginalAmount),data=prosperLoanData)+geom_histogram()+ggtitle("Histogram for Loan Original Amount")
+ggplot(aes(x=LoanOriginalAmount),data=prosperLoanData)+geom_histogram()+
+  ggtitle("Histogram for Loan Original Amount")
+
 meanLoanOriginalAmount <- mean(prosperLoanData$LoanOriginalAmount)
 medianLoanOriginalAmount <- median(prosperLoanData$LoanOriginalAmount)
 ```
@@ -71,8 +65,11 @@ LoanOriginalAmount is 8337 which is greater than the median. The median for the
 LoanOriginalAmount is 6500. 
 
 ```{r echo=FALSE, Univariate_Plots_16, message = FALSE, warning= FALSE}
-ggplot(aes(x=MonthlyLoanPayment),data=prosperLoanData)+geom_histogram(binwidth = 50)+
-  ggtitle("Histogram for Monthly Loan Payment")+coord_cartesian(xlim=c(0:1500))
+ggplot(aes(x=MonthlyLoanPayment),data=prosperLoanData)+
+  geom_histogram(binwidth = 50)+
+  ggtitle("Histogram for Monthly Loan Payment")+
+  coord_cartesian(xlim=c(0:1500))
+
 monthlyLoanPaymentMean <- mean(prosperLoanData$MonthlyLoanPayment)
 monthlyLoanPaymentMedian <- median(prosperLoanData$MonthlyLoanPayment) 
 ```
@@ -82,11 +79,12 @@ this data. The median for the monthly Loan Payment is 217 and the mean is 272.
 
 
 ```{r echo=FALSE, Univariate_Plots_17, message = FALSE, warning= FALSE}
-ggplot(aes(x=CreditScoreRangeLower),data=prosperLoanData)+geom_histogram(binwidth = 5)+
+ggplot(aes(x=CreditScoreRangeLower),data=prosperLoanData)+
+  geom_histogram(binwidth = 5)+
   ggtitle("Histogram for Credit Score Range Lower") + xlim(400, 900)
 
 
-creditScoreRangeLower_na_removed<- na.omit(prosperLoanData$CreditScoreRangeLower)
+creditScoreRangeLower_na_removed<-na.omit(prosperLoanData$CreditScoreRangeLower)
 creditScoreRangeLowerMean <- mean(creditScoreRangeLower_na_removed)
 creditScoreRangeLowerMedian <- median(creditScoreRangeLower_na_removed) 
 ```
@@ -97,8 +95,10 @@ is 685.56/680
 
 
 ```{r echo=FALSE, Univariate_Plots_18, message = FALSE, warning= FALSE}
-ggplot(aes(x=BorrowerRate),data=prosperLoanData)+geom_histogram(binwidth = 0.01)+
+ggplot(aes(x=BorrowerRate),data=prosperLoanData)+
+  geom_histogram(binwidth = 0.01)+
   ggtitle("Histogram for Borrower Rate")
+
 BorrowerRateMean <- mean(prosperLoanData$BorrowerRate)
 BorrowerRateMedian <- median(prosperLoanData$BorrowerRate) 
 ```
@@ -111,6 +111,7 @@ However, there are various spikes especially between 0.24 and 0.31.
 ```{r echo=FALSE, Univariate_Plots_19, message=FALSE, warning=FALSE}
 ggplot(aes(x=DebtToIncomeRatio),data=prosperLoanData)+geom_histogram()+
   ggtitle("Histogram for Debt to Income Ratio")+xlim(0,1.75)
+
 DIRatio_na_removed<- na.omit(prosperLoanData$DebtToIncomeRatio)
 DIRatioMean <- mean(DIRatio_na_removed)
 DIRatioMedian <- median(DIRatio_na_removed) 
@@ -118,7 +119,7 @@ DIRatioMedian <- median(DIRatio_na_removed)
 
 
 Debt To Income Ratio exhibits a slight positive skew with mean > median. 
-Mean is 0.275 and median is 0.22. There is a strong observation here. DI ratio 
+Mean is 0.275 and median is 0.22. DI ratio 
 is less than 0.5 for a good percentage of pepole. 
 
 
@@ -126,7 +127,7 @@ is less than 0.5 for a good percentage of pepole.
 ```{r echo=FALSE, Univariate_Plots_20, warning=FALSE, message=FALSE}
 ggplot(aes(x=StatedMonthlyIncome),data=prosperLoanData)+geom_histogram()+
   ggtitle("Histogram for Stated Monthly Income")+xlim(0,20000)
-#DIRatio_na_removed<- na.omit(prosperLoanData$StatedMonthlyIncome)
+
 StatedMonthlyIncomeMean <- mean(prosperLoanData$StatedMonthlyIncome)
 StatedMonthlyIncomeMedian <- median(prosperLoanData$StatedMonthlyIncome) 
 ```
@@ -140,11 +141,14 @@ Stated Monthly Income is 5608 and the median is 4666.
 
 prosperLoanData$MonthlyDebtTotal <- prosperLoanData$DebtToIncomeRatio * 
   prosperLoanData$StatedMonthlyIncome
+
 ggplot(aes(x=MonthlyDebtTotal),data=prosperLoanData)+geom_histogram()+
   ggtitle("Histogram for Total Monthly Debt")+xlim(0,7500)
+
 TotalMonthlyDebt_na_removed<- na.omit(prosperLoanData$MonthlyDebtTotal)
 TotalMonthlyDebtMean <- mean(TotalMonthlyDebt_na_removed)
 TotalMonthlyDebtMedian <- median(TotalMonthlyDebt_na_removed) 
+
 summary(prosperLoanData$MonthlyDebtTotal)
 ```
 
@@ -161,7 +165,10 @@ this data is 637 and the third quartile is 1622.
 
 ggplot(aes(x=EmploymentStatusDuration),data=prosperLoanData)+geom_histogram()+
   ggtitle("Histogram for Employment Status Duration")+xlim(0,700)
-EmploymentStatusDuration_na_removed<- na.omit(prosperLoanData$EmploymentStatusDuration)
+
+EmploymentStatusDuration_na_removed<- 
+  na.omit(prosperLoanData$EmploymentStatusDuration)
+
 EmploymentStatusDurationMean <- mean(EmploymentStatusDuration_na_removed)
 EmploymentStatusDurationMedian <- median(EmploymentStatusDuration_na_removed) 
 
@@ -175,11 +182,12 @@ more number of employees worked for shorter durations.
 
 
 ```{r echo=FALSE, Univariate_Plots_9, warning=FALSE, message=FALSE}
-
-
-ggplot(aes(x=CurrentCreditLines),data=prosperLoanData)+geom_histogram(binwidth = 1)+
+ggplot(aes(x=CurrentCreditLines),data=prosperLoanData)+
+  geom_histogram(binwidth = 1)+
   ggtitle("Histogram for Current Credit Lines")+xlim(0,70)
+
 CurrentCreditLines_na_removed<- na.omit(prosperLoanData$CurrentCreditLines)
+
 CurrentCreditLinesMean <- mean(CurrentCreditLines_na_removed)
 CurrentCreditLinesMedian <- median(CurrentCreditLines_na_removed) 
 
@@ -192,8 +200,9 @@ Current Credit Lines has a slight positive skew. The mean/median ratio is
 
 
 ```{r echo=FALSE, Univariate_Plots_10, warning=FALSE, message=FALSE}
-#using lubridate and extracting the month and year from the loan Origination Date
+#using lubridate to extract the month & year from the loan Origination Date
 prosperLoanData$date <- ymd_hms(prosperLoanData$LoanOriginationDate)
+
 prosperLoanData$LoanMonth <- factor(month(prosperLoanData$date))
 prosperLoanData$LoanYear <- factor(year(prosperLoanData$date))
 
@@ -278,7 +287,7 @@ summary(prosperLoanData$IsBorrowerHomeowner)
 Almost 50% of the borrowers are home owners
 
 
-```{r echo=FALSE, Univariate_Plots_Employment_Status, warning=FALSE, message=FALSE}
+```{r echo=FALSE, UVP_Employment_Status, warning=FALSE, message=FALSE}
 top_7_occupations <- prosperLoanData_na_omitted  %>% group_by(Occupation) %>% 
   summarise(count=n()) %>% arrange(desc(count)) %>% top_n(7)
 
@@ -293,12 +302,6 @@ Employment Status data doesnt seem to be complete. Also, as anticipated, the
 employed categroy go for the highest number of loans. 
 
 
-> **Tip**: Make sure that you leave a blank line between the start / end of
-each code block and the end / start of your Markdown text so that it is
-formatted nicely in the knitted text. Note as well that text on consecutive
-lines is treated as a single space. Make sure you have a blank line between
-your paragraphs so that they too are formatted for easy readability.
-
 # Univariate Analysis
 
 > **Tip**: Now that you've completed your univariate explorations, it's time to
@@ -306,26 +309,34 @@ reflect on and summarize what you've found. Use the questions below to help you
 gather your observations and add your own if you have other thoughts!
 
 ### What is the structure of your dataset?
+The data set has around 113937 observations and around 81 columns. For our 
+analysis a combination of discrete and continuous variables are being used. All 
+of the variables are not being used. We are using around 20 variables here. 
 
 ### What is/are the main feature(s) of interest in your dataset?
+The data set is huge and the more we explore, the more can we get deeper into 
+the data. For now, the focus is on some of the below areas, which was found 
+interesting and intriguing:
+credit score, debt to income ratio, income, loan amount, interest rate, term etc
 
 ### What other features in the dataset do you think will help support your \
 investigation into your feature(s) of interest?
+Loan Category, Loan Amount, Loan Status etc are available and these will help 
+analyse the data better
 
 ### Did you create any new variables from existing variables in the dataset?
+LoanYear, LoanMonth etc were derived from the LoanOriginationDate. Also, a 
+new column MonthlyDebtTotal was added by multiplying DI ratio with the stated 
+Monthly Income
 
 ### Of the features you investigated, were there any unusual distributions? \
 Did you perform any operations on the data to tidy, adjust, or change the form \
 of the data? If so, why did you do this?
-
+Term and ListingCategory..numeric. were converted to factor variables. They were 
+initially categorical values. It was done while making a bar plot 
+which expected that these values are discrete. 
 
 # Bivariate Plots Section
-
-> **Tip**: Based on what you saw in the univariate plots, what relationships
-between variables might be interesting to look at in this section? Don't limit
-yourself to relationships between a main output feature and one of the
-supporting variables. Try to look at relationships between supporting variables
-as well.
 
 
 # Bivariate Analysis
@@ -500,27 +511,25 @@ ggplot(data=prosperLoanData, aes(x=Term,y=CreditScoreRangeLower))+
 
 Term and Credit Scores - Not much insights can be drawn from this plot. 
 
-> **Tip**: As before, summarize what you found in your bivariate explorations
-here. Use the questions below to guide your discussion.
-
 ### Talk about some of the relationships you observed in this part of the \
 investigation. How did the feature(s) of interest vary with other features in \
 the dataset?
+Total Monthly Debt and Current Credit Lines have a strong positive correlation
+Longer the term of the loan, it is found that the loan amount is also larger 
+Employed and self employed ones borrow larger amounts 
 
 ### Did you observe any interesting relationships between the other features \
 (not the main feature(s) of interest)?
+Could not do this analysis. The credit scores and the salary ranges, credit 
+scores and employment status are some of the relationships I wanted to analyse.
 
 ### What was the strongest relationship you found?
+CurrentCreditLines and MonthlyDebtTotal had a strong +ve correlation with a 
+correlation coefficient of 0.47. Also, credit scores and borrower rate have a 
+strong positive correlation with a correlation coefficient of 0.46
 
 
 # Multivariate Plots Section
-
-> **Tip**: Now it's time to put everything together. Based on what you found in
-the bivariate plots section, create a few multivariate plots to investigate
-more complex interactions between variables. Make sure that the plots that you
-create here are justified by the plots you explored in the previous section. If
-you plan on creating any mathematical models, this is the section where you
-will do that.
 
 ```{r echo=FALSE, Scores_Amount_BorrowerRate, message=FALSE, warning=FALSE}
 
@@ -539,28 +548,29 @@ higher rates. These are the borrowers with lower credit scores
 
 ```{r echo=FALSE, MVP_2, message=FALSE, warning=FALSE}
 ggplot(data=subset(prosperLoanData, prosperLoanData$IncomeRange != '$0' & 
-                     prosperLoanData$IncomeRange != 'Not displayed'), 
-       aes(x=LoanYear, y= MonthlyLoanPayment/StatedMonthlyIncome, 
-           fill=IncomeRange)) +geom_boxplot() +ylim(0, 0.1) +
-  facet_wrap(~IncomeRange) + theme(axis.text.x = element_text(angle=90))
+      prosperLoanData$IncomeRange != 'Not displayed'), 
+      aes(x=LoanYear, y= MonthlyLoanPayment/StatedMonthlyIncome, 
+      fill=IncomeRange)) +geom_boxplot() +ylim(0, 0.1) +
+      facet_wrap(~IncomeRange) + theme(axis.text.x = element_text(angle=90))+
+      ggtitle("Loan Year - Debt coverage - Facted by Income Range")
 ```
 
+MonthlyLoanPayment was divided by the StatedMonthlyIncome to observe the 
+yearwise debt coverage ratio. This was faceted by IncomeRange. 
+All the income ranges have an uptick in the most recent years.
 
-
-```{r echo=FALSE, MVP_2, message=FALSE, warning=FALSE}
-#ggplot(data=subset(prosperLoanData, prosperLoanData$IncomeRange != '$0' & 
-#                     prosperLoanData$IncomeRange != 'Not displayed'), 
-#       aes(x=LoanYear, y= MonthlyLoanPayment/StatedMonthlyIncome, 
-#           fill=IncomeRange)) +geom_boxplot() +ylim(0, 0.1) +
-#  facet_wrap(~IncomeRange) + theme(axis.text.x = element_text(angle=90))
-
+```{r echo=FALSE, MVP_3, message=FALSE, warning=FALSE}
 ggplot(data=subset(prosperLoanData, prosperLoanData$IncomeRange != '$0' & 
-                     prosperLoanData$IncomeRange != 'Not displayed'), 
-       aes(x=LoanYear, y= DebtToIncomeRatio, fill=IncomeRange)) +
-  geom_boxplot() +ylim(0, .5) +facet_wrap(~IncomeRange)+ 
-  theme(axis.text.x = element_text(angle=90))
+      prosperLoanData$IncomeRange != 'Not displayed'), 
+      aes(x=LoanYear, y= DebtToIncomeRatio, fill=IncomeRange)) +
+      geom_boxplot() +ylim(0, .5) +facet_wrap(~IncomeRange)+ 
+      theme(axis.text.x = element_text(angle=90))
 ```
 
+
+Most of the borrowers seem to have DI ratio of 0.2 to 0.3 and is showing an 
+uptick in the most recent years. Borrowers with income range $100k + have a
+low DI ratio and is around 0.15-0.20 
 
 # Multivariate Analysis
 
@@ -568,7 +578,15 @@ ggplot(data=subset(prosperLoanData, prosperLoanData$IncomeRange != '$0' &
 investigation. Were there features that strengthened each other in terms of \
 looking at your feature(s) of interest?
 
+Borrowers with lower credit scores takes loans for a smaller amount, however at 
+a higher interest rate
+
+Also, it was observed that borrowers with the highest income have a lower 
+percentage of debt. 
+
 ### Were there any interesting or surprising interactions between features?
+Taking a look at the DI ratio, it was observed that higher the income, 
+the lower is the percentage of debt. 
 
 ### OPTIONAL: Did you create any models with your dataset? Discuss the \
 strengths and limitations of your model.
@@ -586,40 +604,81 @@ units), and good aesthetic choices (e.g. color, transparency). After each plot,
 make sure you justify why you chose each plot by describing what it shows.
 
 ### Plot One
-```{r echo=FALSE, Plot_One}
+```{r echo=FALSE, Plot_One, message=FALSE,warning=FALSE}
 ggplot(data=subset(prosperLoanData, prosperLoanData$CreditScoreRangeLower > 660), aes(x=BorrowerRate, y=LoanOriginalAmount, color=CreditScoreRangeLower)) +geom_point(alpha=0.1, position='jitter') + scale_colour_gradient(low="blue", high="red") +ggtitle("Loan Amount by Credit Score and Interest Rate") +facet_wrap(~LoanYear)
 ```
 
 ### Description One
-
+The above plot shows how the lending platform Prosper has matured over years. 
+Red shows higher credit scores and we can see that by the year 2014, blue 
+dominates,which would also mean that the over all risk exposure has increased. 
+(For better visualisation, only credit scores from the first quartile are 
+plotted here)
 
 ### Plot Two
-```{r echo=FALSE, Plot_Two}
-ggplot(data=subset(prosperLoanData, prosperLoanData$DebtToIncomeRatio < .4 ), aes(x=BorrowerRate, y=LoanOriginalAmount, color=DebtToIncomeRatio)) +geom_point(alpha=0.1, position='jitter') +facet_wrap(~LoanYear) + scale_colour_gradient(low="green", high="red") +ggtitle("Loan Amount by DI Ratio and Interest Rate") +xlim( 0, 0.4)
+```{r echo=FALSE, Plot_Two, message=FALSE, warning=FALSE}
+ggplot(data=subset(prosperLoanData, prosperLoanData$DebtToIncomeRatio < .4 ), 
+       aes(x=BorrowerRate, y=LoanOriginalAmount, 
+           color=DebtToIncomeRatio)) +geom_point(alpha=0.1, 
+                                  position='jitter') +facet_wrap(~LoanYear) + 
+      scale_colour_gradient(low="green", high="red") +
+      ggtitle("Loan Amount by DI Ratio and Interest Rate") +xlim( 0, 0.4)
+
+
 
 ```
 
 ### Description Two
 
+As the prosper lending platform matures, probably the risk management also has
+improved. This could be the reason, the borrower rates are decreasing for larger 
+loans, mainly for those with lower debt to income ratio.  
 
 ### Plot Three
 ```{r echo=FALSE, Plot_Three}
-delin <- prosperLoanData[grep("Past Due", prosperLoanData$LoanStatus),] # only delinquent
+delin <- prosperLoanData[grep("Past Due", prosperLoanData$LoanStatus),] 
+# only delinquent
 
-ggplot(data=subset(delin, delin$IncomeRange != '$0'), aes(y=LoanYear, x=LoanStatus)) +geom_point(aes(color=LoanStatus),size=3, alpha=0.5, position='jitter') +facet_wrap(~IncomeRange) +ggtitle("Delinquent loan exposure summary") +scale_colour_brewer(type="div", palette="Dark2") +scale_x_discrete(labels="")
+ggplot(data=subset(delin, delin$IncomeRange != '$0'), 
+       aes(y=LoanYear, x=LoanStatus)) +geom_point(aes(color=LoanStatus),size=3, 
+      alpha=0.5, position='jitter') +
+  facet_wrap(~IncomeRange) +ggtitle("Delinquent loan exposure 
+                        summary") +scale_colour_brewer(type="div", 
+                                  palette="Dark2") +scale_x_discrete(labels="")
 
 ```
 
 ### Description Three
+Only deliquent loans were subsetted here. The majority of the delinquencies are 
+clustered in 1-15days past due. Maximum delinqueny is happening for the 
+borrowers having income ranges between $25k-50k and $50-75k.
 
 ------
 
 # Reflection
+The data set has almost 114,000 loans. 
 
-> **Tip**: Here's the final step! Reflect on the exploration you performed and
-the insights you found. What were some of the struggles that you went through?
-What went well? What was surprising? Make sure you include an insight into
-future work that could be done with the dataset.
+The most time consuming part of this analysis was to find some variables which 
+will help make some good analysis & to list down what are the analysis that 
+has to be performed. 
 
-> **Tip**: Don't forget to remove this, and the other **Tip** sections before
-saving your final work and knitting the final report!
+There was too much of information that, it was not difficult to atleast perform 
+the single variable and bi variable analysis. There were too many choices. 
+However, drilling down into multi variable analysis from the results of the bi 
+variable analysis was again difficult. 
+
+Making the choice for plotting three plots as the outcome of the entire analysis 
+was again difficult since there was too much of data to be chosen from.    
+
+Regression models & some predictions are what I would have tried working on if 
+time permitted.  For example, preclosure, delinquency, late payment etc if it 
+can be predicted, it would have been good. 
+
+One of the good decisions was to restrict the analysis to limited variables and 
+not look into the entire data to perform the analysis. This helped finish the 
+analysis comparitively faster. 
+
+# References
+https://rpubs.com/yugoli/UdacityP3
+
+
