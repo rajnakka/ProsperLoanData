@@ -104,20 +104,24 @@ is 685.56/680
 ```{r echo=FALSE, Univariate_Plots_18, message = FALSE, warning= FALSE}
 ggplot(aes(x=BorrowerRate),data=prosperLoanData)+
   geom_histogram(binwidth = 0.5)+
-  ggtitle("Histogram for Borrower Rate")
+  ggtitle("Histogram for Borrower Rate") +
+  labs(x = "Borrower Rate", y = "Count")
+
 
 BorrowerRateMean <- mean(prosperLoanData$BorrowerRate)
 BorrowerRateMedian <- median(prosperLoanData$BorrowerRate) 
 ```
 
 
-BorrowerRate also has a normal distribution and the mean/med ratio is 0.19/0.18
+Borrower Rate also has a normal distribution and the mean/med ratio is 0.19/0.18
 However, there are various spikes especially between 0.24 and 0.31.
 
 
 ```{r echo=FALSE, Univariate_Plots_19, message=FALSE, warning=FALSE}
 ggplot(aes(x=DebtToIncomeRatio),data=prosperLoanData)+geom_histogram()+
-  ggtitle("Histogram for Debt to Income Ratio")+xlim(0,1.75)
+  ggtitle("Histogram for Debt to Income Ratio")+xlim(0,1.75) +
+  labs(x = "Debt to income ratio", y = "Count")
+
 
 DIRatio_na_removed<- na.omit(prosperLoanData$DebtToIncomeRatio)
 DIRatioMean <- mean(DIRatio_na_removed)
@@ -133,7 +137,9 @@ is less than 0.5 for a good percentage of pepole.
 
 ```{r echo=FALSE, Univariate_Plots_20, warning=FALSE, message=FALSE}
 ggplot(aes(x=StatedMonthlyIncome),data=prosperLoanData)+geom_histogram()+
-  ggtitle("Histogram for Stated Monthly Income")+xlim(0,20000)
+  ggtitle("Histogram for Stated Monthly Income")+xlim(0,20000) +
+  labs(x = "Staged monthly income ($)", y = "Count")
+
 
 StatedMonthlyIncomeMean <- mean(prosperLoanData$StatedMonthlyIncome)
 StatedMonthlyIncomeMedian <- median(prosperLoanData$StatedMonthlyIncome) 
@@ -150,7 +156,9 @@ prosperLoanData$MonthlyDebtTotal <- prosperLoanData$DebtToIncomeRatio *
   prosperLoanData$StatedMonthlyIncome
 
 ggplot(aes(x=MonthlyDebtTotal),data=prosperLoanData)+geom_histogram()+
-  ggtitle("Histogram for Total Monthly Debt")+xlim(0,7500)
+  ggtitle("Histogram for Total Monthly Debt")+xlim(0,7500) +
+  labs(x = "Monthly Debt Total ", y = "Count")
+
 
 TotalMonthlyDebt_na_removed<- na.omit(prosperLoanData$MonthlyDebtTotal)
 TotalMonthlyDebtMean <- mean(TotalMonthlyDebt_na_removed)
@@ -171,7 +179,9 @@ this data is 637 and the third quartile is 1622.
 
 
 ggplot(aes(x=EmploymentStatusDuration),data=prosperLoanData)+geom_histogram()+
-  ggtitle("Histogram for Employment Status Duration")+xlim(0,700)
+  ggtitle("Histogram for Employment Status Duration")+xlim(0,700) +
+  labs(x = "Employment status duration (Days)", y = "Count")
+
 
 EmploymentStatusDuration_na_removed<- 
   na.omit(prosperLoanData$EmploymentStatusDuration)
@@ -191,7 +201,9 @@ more number of employees worked for shorter durations.
 ```{r echo=FALSE, Univariate_Plots_9, warning=FALSE, message=FALSE}
 ggplot(aes(x=CurrentCreditLines),data=prosperLoanData)+
   geom_histogram(binwidth = 1)+
-  ggtitle("Histogram for Current Credit Lines")+xlim(0,70)
+  ggtitle("Histogram for Current Credit Lines")+xlim(0,70) +
+  labs(x = "Current credit lines", y = "Count")
+
 
 CurrentCreditLines_na_removed<- na.omit(prosperLoanData$CurrentCreditLines)
 
@@ -214,7 +226,9 @@ prosperLoanData$LoanMonth <- factor(month(prosperLoanData$date))
 prosperLoanData$LoanYear <- factor(year(prosperLoanData$date))
 
 ggplot(aes(x=LoanMonth),data=prosperLoanData)+geom_bar()+
-  ggtitle("Loan Origination - Monthly")
+  ggtitle("Loan Origination - Monthly") +
+  labs(x = "Month", y = "Count")
+
 
 
 ```
@@ -224,7 +238,9 @@ Loans originate mostly during October, December and January
 
 ```{r echo=FALSE, Univariate_Plots_11, warning=FALSE, message=FALSE}
 ggplot(aes(x=LoanYear),data=prosperLoanData)+geom_bar()+
-  ggtitle("Loan Origination - Yearly")
+  ggtitle("Loan Origination - Yearly") +
+  labs(x = "Year", y = "Count")
+
 ```
 
 
@@ -262,7 +278,9 @@ top_10_states <- prosperLoanData_na_omitted  %>% group_by(BorrowerState) %>%
 
 ggplot(aes(x=BorrowerState, y = count),data=top_10_states)+
   geom_bar(stat="identity")+
-  ggtitle("Borrower State Vs count - Bar Chart for the top 10 states")
+  ggtitle("Borrower State Vs count - Bar Chart for the top 10 states") +
+  labs(x = "State (US)", y = "Count")
+
 ```
 
 
@@ -277,7 +295,9 @@ top_7_occupations <- prosperLoanData_na_omitted  %>% group_by(Occupation) %>%
 
 ggplot(aes(x=Occupation, y = count),data=top_7_occupations)+
   geom_bar(stat="identity")+
-  ggtitle("Occupation Vs count - Bar Chart for the top 7 occupations")
+  ggtitle("Occupation Vs count - Bar Chart for the top 7 occupations") +
+  labs(x = "Borrower Occupation", y = "Count")
+
 ```
 
 
@@ -301,7 +321,9 @@ top_7_occupations <- prosperLoanData_na_omitted  %>% group_by(Occupation) %>%
 
 ggplot(aes(x=EmploymentStatus),data=prosperLoanData)+
   geom_bar()+
-  ggtitle("Employment Status - Histogram")
+  ggtitle("Employment Status - Histogram") +
+  labs(x = "Employment Status", y = "Count")
+
 ```
 
 
