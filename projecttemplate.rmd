@@ -53,7 +53,10 @@ prosperLoanData$Term <- factor(prosperLoanData$Term)
 
 ```{r echo=FALSE, Univariate_Plots_15, message = FALSE, warning= FALSE}
 ggplot(aes(x=LoanOriginalAmount),data=prosperLoanData)+geom_histogram()+
-  ggtitle("Histogram for Loan Original Amount")
+  ggtitle("Histogram for Loan Original Amount") +
+  labs(x = "Loan Amount ($)", y = "Count")
+
+
 
 meanLoanOriginalAmount <- mean(prosperLoanData$LoanOriginalAmount)
 medianLoanOriginalAmount <- median(prosperLoanData$LoanOriginalAmount)
@@ -68,7 +71,9 @@ LoanOriginalAmount is 6500.
 ggplot(aes(x=MonthlyLoanPayment),data=prosperLoanData)+
   geom_histogram(binwidth = 50)+
   ggtitle("Histogram for Monthly Loan Payment")+
-  coord_cartesian(xlim=c(0:1500))
+  coord_cartesian(xlim=c(0:1500)) +
+  labs(x = "Monthly Loan Payment ($)", y = "Count")
+
 
 monthlyLoanPaymentMean <- mean(prosperLoanData$MonthlyLoanPayment)
 monthlyLoanPaymentMedian <- median(prosperLoanData$MonthlyLoanPayment) 
@@ -80,8 +85,10 @@ this data. The median for the monthly Loan Payment is 217 and the mean is 272.
 
 ```{r echo=FALSE, Univariate_Plots_17, message = FALSE, warning= FALSE}
 ggplot(aes(x=CreditScoreRangeLower),data=prosperLoanData)+
-  geom_histogram(binwidth = 5)+
-  ggtitle("Histogram for Credit Score Range Lower") + xlim(400, 900)
+  geom_histogram(binwidth = 10)+
+  ggtitle("Histogram for Credit Score Range Lower") + xlim(400, 900) +
+  labs(x = "Credit Score Range", y = "Count")
+
 
 
 creditScoreRangeLower_na_removed<-na.omit(prosperLoanData$CreditScoreRangeLower)
@@ -96,7 +103,7 @@ is 685.56/680
 
 ```{r echo=FALSE, Univariate_Plots_18, message = FALSE, warning= FALSE}
 ggplot(aes(x=BorrowerRate),data=prosperLoanData)+
-  geom_histogram(binwidth = 0.01)+
+  geom_histogram(binwidth = 0.5)+
   ggtitle("Histogram for Borrower Rate")
 
 BorrowerRateMean <- mean(prosperLoanData$BorrowerRate)
@@ -457,7 +464,7 @@ ggplot(data=prosperLoanData, aes(x=LoanMonth, y=LoanOriginalAmount)) +
 
 Dec to Feb is the period when the loan amounts are usually higher. 
 
-```{r echo=FALSE, Bivariate_Plots_ListingCategory_And_LoanOriginalAmount}
+```{r echo=FALSE, Bivariate_Plots_ListingCategory_And_LoanOriginalAmount, fig.width=15, fig.height=12.5}
 ggplot(data=prosperLoanData, aes(x=ListingCategory..numeric.,
                                  y=LoanOriginalAmount, 
                    fill=ListingCategory..numeric.,)) + 
@@ -531,12 +538,12 @@ strong positive correlation with a correlation coefficient of 0.46
 
 # Multivariate Plots Section
 
-```{r echo=FALSE, Scores_Amount_BorrowerRate, message=FALSE, warning=FALSE}
+```{r echo=FALSE, Scores_Amount_BorrowerRate, message=FALSE, warning=FALSE, fig.width=16, fig.height=12.5}
 
 
 ggplot(data=prosperLoanData, 
        aes(x=LoanOriginalAmount, y=BorrowerRate, color=CreditScoreRangeLower)) +
-  geom_point(alpha=0.75, position='jitter') + 
+  geom_jitter(alpha=0.15, position='jitter') + 
   scale_colour_gradient(low="blue", high="red") + 
   ggtitle("Loan Amount by Credit Score and Interest Rate")
 
