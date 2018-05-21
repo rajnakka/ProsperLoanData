@@ -577,7 +577,7 @@ strong positive correlation with a correlation coefficient of 0.46
 
 # Multivariate Plots Section
 
-```{r echo=FALSE, Scores_Amount_BorrowerRate, message=FALSE, warning=FALSE, fig.width=16, fig.height=12.5}
+```{r echo=FALSE, Scores_Amount_BorrowerRate, message=FALSE, warning=FALSE, fig.width=17, fig.height=12.5}
 
 
 ggplot(data=prosperLoanData, 
