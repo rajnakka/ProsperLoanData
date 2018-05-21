@@ -584,7 +584,9 @@ ggplot(data=prosperLoanData,
        aes(x=LoanOriginalAmount, y=BorrowerRate, color=CreditScoreRangeLower)) +
   geom_jitter(alpha=0.15, position='jitter') + 
   scale_colour_gradient(low="blue", high="red") + 
-  ggtitle("Loan Amount by Credit Score and Interest Rate")
+  ggtitle("Loan Amount by Credit Score and Interest Rate") +
+  labs(x = "Loan Original Amount", y = "Borrower Rate") 
+
 
 ```
 
@@ -598,7 +600,8 @@ ggplot(data=subset(prosperLoanData, prosperLoanData$IncomeRange != '$0' &
       aes(x=LoanYear, y= MonthlyLoanPayment/StatedMonthlyIncome, 
       fill=IncomeRange)) +geom_boxplot() +ylim(0, 0.1) +
       facet_wrap(~IncomeRange) + theme(axis.text.x = element_text(angle=90))+
-      ggtitle("Loan Year - Debt coverage - Facted by Income Range")
+      ggtitle("Loan Year - Debt coverage - Facted by Income Range") +
+      labs(x = "Year", y = "Monthly Loan Payments / Stated Monthly Income") 
 ```
 
 MonthlyLoanPayment was divided by the StatedMonthlyIncome to observe the 
@@ -610,7 +613,9 @@ ggplot(data=subset(prosperLoanData, prosperLoanData$IncomeRange != '$0' &
       prosperLoanData$IncomeRange != 'Not displayed'), 
       aes(x=LoanYear, y= DebtToIncomeRatio, fill=IncomeRange)) +
       geom_boxplot() +ylim(0, .5) +facet_wrap(~IncomeRange)+ 
-      theme(axis.text.x = element_text(angle=90))
+      theme(axis.text.x = element_text(angle=90)) +
+      labs(x = "Year", y = "Debt To Income Ratio") 
+
 ```
 
 
