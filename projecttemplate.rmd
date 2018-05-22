@@ -44,12 +44,18 @@ cats <- c('0 - Not Available', '1 - Debt Consolidation',
           '14 - Large Purchases', '15 - Medical/Dental', '16 - Motorcycle', 
           '17 - RV', '18 - Taxes', '19 - Vacation', '20 - Wedding Loans')
 
+
+
 #converting Term into a factor variable
 prosperLoanData$Term <- factor(prosperLoanData$Term)
 
 ```
 
 # Univariate Plots Section
+
+
+
+
 
 ```{r echo=FALSE, Univariate_Plots_15, message = FALSE, warning= FALSE}
 ggplot(aes(x=LoanOriginalAmount),data=prosperLoanData)+geom_histogram()+
@@ -85,7 +91,7 @@ this data. The median for the monthly Loan Payment is 217 and the mean is 272.
 
 ```{r echo=FALSE, Univariate_Plots_17, message = FALSE, warning= FALSE}
 ggplot(aes(x=CreditScoreRangeLower),data=prosperLoanData)+
-  geom_histogram(binwidth = 10)+
+  geom_histogram(binwidth = 20)+
   ggtitle("Histogram for Credit Score Range Lower") + xlim(400, 900) +
   labs(x = "Credit Score Range (Lower)", y = "Count")
 
@@ -103,9 +109,9 @@ is 685.56/680
 
 ```{r echo=FALSE, Univariate_Plots_18, message = FALSE, warning= FALSE}
 ggplot(aes(x=BorrowerRate),data=prosperLoanData)+
-  geom_histogram(binwidth = 0.5)+
+  geom_histogram(binwidth = 0.01)+
   ggtitle("Histogram for Borrower Rate") +
-  labs(x = "Borrower Rate", y = "Count")
+  labs(x = "Borrower Rate (%)", y = "Count")
 
 
 BorrowerRateMean <- mean(prosperLoanData$BorrowerRate)
@@ -157,7 +163,7 @@ prosperLoanData$MonthlyDebtTotal <- prosperLoanData$DebtToIncomeRatio *
 
 ggplot(aes(x=MonthlyDebtTotal),data=prosperLoanData)+geom_histogram()+
   ggtitle("Histogram for Total Monthly Debt")+xlim(0,7500) +
-  labs(x = "Monthly Debt Total ", y = "Count")
+  labs(x = "Monthly Debt Total ($) ", y = "Count")
 
 
 TotalMonthlyDebt_na_removed<- na.omit(prosperLoanData$MonthlyDebtTotal)
@@ -227,7 +233,7 @@ prosperLoanData$LoanYear <- factor(year(prosperLoanData$date))
 
 ggplot(aes(x=LoanMonth),data=prosperLoanData)+geom_bar()+
   ggtitle("Loan Origination - Monthly") +
-  labs(x = "Month", y = "Count")
+  labs(x = "Month", y = "Count") 
 
 
 
@@ -248,6 +254,7 @@ During the year 2009, there was a drop. This can be attributed to the economic
 crisis during that year. 
 
 ```{r echo=FALSE, Univariate_Plots_12, warning=FALSE, message=FALSE}
+print("Loans by Status")
 table(prosperLoanData$LoanStatus)
 ```
 
@@ -256,6 +263,7 @@ Most of the loans are either in the completed status or in current status.
 
 
 ```{r echo=FALSE, Univariate_Plots_23, warning=FALSE, message=FALSE}
+print("# of Loans by income Range")
 summary(prosperLoanData$IncomeRange)
 ```
 
@@ -263,7 +271,7 @@ Most of the loans are taken by people with income range between 25k USD to
 50k USD and 50k to 75k USD. 
 
 ```{r echo=FALSE, Univariate_Plots_13, warning=FALSE, message=FALSE}
-summary(prosperLoanData$Term)
+print("# of Loans by term")
 table(prosperLoanData$Term)
 ```
 
@@ -322,7 +330,8 @@ top_7_occupations <- prosperLoanData_na_omitted  %>% group_by(Occupation) %>%
 ggplot(aes(x=EmploymentStatus),data=prosperLoanData)+
   geom_bar()+
   ggtitle("Employment Status - Histogram") +
-  labs(x = "Employment Status", y = "Count")
+  labs(x = "Employment Status", y = "Count") + 
+  theme(axis.text.x = element_text(angle=90))
 
 ```
 
@@ -332,10 +341,6 @@ employed categroy go for the highest number of loans.
 
 
 # Univariate Analysis
-
-> **Tip**: Now that you've completed your univariate explorations, it's time to
-reflect on and summarize what you've found. Use the questions below to help you
-gather your observations and add your own if you have other thoughts!
 
 ### What is the structure of your dataset?
 The data set has around 113937 observations and around 81 columns. For our 
@@ -372,7 +377,7 @@ which expected that these values are discrete.
 
 ```{r echo=FALSE, CreditLines_Total_Monthly_Debt, warning=FALSE, message=FALSE}
 ggplot(aes(x=CurrentCreditLines, y=MonthlyDebtTotal),data=prosperLoanData) +
-  labs(x = "Current Credit Lines", y = "Monthly Debt Total") +
+  labs(x = "Current Credit Lines", y = "Monthly Debt Total ($)") +
   geom_point(alpha=0.5,position="jitter")+xlim(0,30)+ylim(0,10000)
   ggtitle("Current Credit Lines Vs Total Monthly Debt") 
   corCoef = cor.test(prosperLoanData$CurrentCreditLines,
@@ -387,7 +392,7 @@ Monthly Debt and the value of the correlation coeffient is 0.47.
 
 ```{r echo=FALSE,CreditScoreRange__BorrowerRate, warning=FALSE, message=FALSE}
 ggplot(aes(x=CreditScoreRangeLower, y=BorrowerRate),data=prosperLoanData)+
-  labs(x = "Credit Score Range (Lower)", y = "Borrower Rate") +
+  labs(x = "Credit Score Range (Lower)", y = "Borrower Rate (%)") +
   geom_point(alpha=0.1,position="jitter")+
   ggtitle("Credit Score Range Lower And Borrower Rate")+xlim(450,900)
   corCoef = cor.test(prosperLoanData$CreditScoreRangeLower,
@@ -403,7 +408,7 @@ get the loans at a lower borrower rate.
 
 ```{r echo=FALSE,MonthlyIncome_TotalMonthlyDebt, warning=FALSE, message=FALSE}
 ggplot(aes(x=StatedMonthlyIncome, y=MonthlyDebtTotal),data=prosperLoanData)+
-  labs(x = "Stated Monthly Income", y = "Monthly Debt Total") +
+  labs(x = "Stated Monthly Income ($)", y = "Monthly Debt Total ($)")  +
   geom_point(alpha=0.1,position="jitter")+
   ggtitle("Monthly Income And Total Monthly Debt")+ xlim(0,15000)+ylim(0,6500)
   corCoef = cor.test(prosperLoanData$StatedMonthlyIncome,
@@ -419,7 +424,7 @@ monthly debt. The correlation coefficient is 0.36.
 
 ```{r echo=FALSE, LoanAmount_And_BorrowerRate, warning=FALSE, message=FALSE}
 ggplot(aes(x=LoanOriginalAmount, y=BorrowerRate),data=prosperLoanData)+
-  labs(x = "Original Loan Amount", y = "Borrower Rate") +
+  labs(x = "Original Loan Amount ($)", y = "Borrower Rate (%)") +
   geom_point(alpha=0.1,position="jitter",size=1)+
   ggtitle("Monthly Income And Total Monthly Debt")#+ xlim(0,15000)+ylim(0,6500)
   corCoef = cor.test(prosperLoanData$LoanOriginalAmount,
@@ -435,7 +440,7 @@ disbursed at a lower interest rate.
 
 ```{r echo=FALSE, LoanAmount_CreditScoreLower, warning=FALSE, message=FALSE}
 ggplot(aes(x=LoanOriginalAmount, y=CreditScoreRangeLower),data=prosperLoanData)+
-  labs(x = "Original Loan Amount", y = "Credit Score Range (Lower)") +
+  labs(x = "Original Loan Amount ($)", y = "Credit Score Range (Lower)") +
   geom_point(alpha=0.1,position="jitter")+
   ggtitle("LoanOriginalAmount And CreditScoreRangeLower")
   corCoef = cor.test(prosperLoanData$LoanOriginalAmount,
@@ -449,9 +454,10 @@ Higher the loans, the credit scores can increase.
 
 ```{r echo=FALSE, MonthlyIncome_TotalMontlyDebt, warning=FALSE, message=FALSE}
 p1<-ggplot(aes(x=StatedMonthlyIncome, y=MonthlyDebtTotal),data=prosperLoanData)+
-  labs(x = "Stated Monthly Income", y = "Total Monthly Debt") +
+  labs(x = "Stated Monthly Income ($) ", y = "Total Monthly Debt ($)") +
   geom_point(alpha=0.025,position="jitter")+
-  ggtitle("StatedMonthlyIncome And TotalMontlyDebt")+ xlim(0,15000)+ylim(0,7000)
+  ggtitle("MonthlyIncome And TotalMontlyDebt - (Facted over IsHomeOwners)")+ 
+  xlim(0,15000)+ylim(0,7000)
 p1 + facet_wrap(~IsBorrowerHomeowner)
   corCoef = cor.test(prosperLoanData$StatedMonthlyIncome,
                      prosperLoanData$MonthlyDebtTotal,method="pearson")
@@ -467,7 +473,7 @@ with an income of around 5000.
 
 ```{r echo=FALSE, LoanYear_And_LoanOriginalAmount, warning=FALSE, message=FALSE}
 ggplot(data=prosperLoanData, aes(x=LoanYear,y=LoanOriginalAmount)) + 
-  labs(x = "Year", y = "Original Loan Amount") +
+  labs(x = "Year", y = "Original Loan Amount ($)") +
   geom_boxplot()+
   ggtitle("Loan Year And Loan Original Amount")
 
@@ -480,14 +486,9 @@ The median amount dips in 2009 and has a sharp rise in 2013.
 
 
 ```{r echo=FALSE, LoanMonth_LoanOriginalAmount, warning=FALSE, message=FALSE}
-ggplot(data=prosperLoanData, aes(x=LoanYear,y=LoanOriginalAmount))+ 
-  labs(x = "Year", y = "Original Loan Amount") +
-  geom_boxplot()+
-  ggtitle("Loan Month And Loan Original Amount")
-
 
 ggplot(data=prosperLoanData, aes(x=LoanMonth, y=LoanOriginalAmount)) + 
-  labs(x = "Month", y = "Original Loan Amount") +
+  labs(x = "Month", y = "Original Loan Amount ($)") +
   geom_bar(stat='identity')
 
  
@@ -499,7 +500,7 @@ Dec to Feb is the period when the loan amounts are usually higher.
 ggplot(data=prosperLoanData, aes(x=ListingCategory..numeric.,
                                  y=LoanOriginalAmount, 
                    fill=ListingCategory..numeric.)) + 
-  labs(x = "Listing Category", y = "Original Loan Amount") +
+  labs(x = "Listing Category", y = "Original Loan Amount ($)") +
   geom_boxplot() + scale_fill_discrete(name="Loan Category", labels=cats) +
   ggtitle("Loan Amount and Loan Category")
 ```
@@ -509,7 +510,7 @@ The higher amount loans are taken for Debt consolidation and baby and adoption
 ```{r echo=FALSE, IncomeRange_And_LoanAmount, warning=FALSE, message=FALSE}
 ggplot(data=prosperLoanData, aes(x=IncomeRange,y=LoanOriginalAmount, 
                                  color=IncomeRange))+
-  labs(x = "Income Range", y = "Original Loan Amount") +
+  labs(x = "Income Range", y = "Original Loan Amount ($)") +
   geom_boxplot() + scale_x_discrete(labels="") +
   ggtitle("Loan Amount and Income Range")
 ```
@@ -522,7 +523,7 @@ ggplot(data=subset(prosperLoanData, prosperLoanData$EmploymentStatus!=""),
        aes(x=EmploymentStatus, y=LoanOriginalAmount, color=EmploymentStatus)) +
   geom_boxplot() + scale_x_discrete(labels="")+
   ggtitle("Employment Status and Loan Amount") +
-  labs(x = "Employment Status", y = "Original Loan Amount") 
+  labs(x = "Employment Status", y = "Original Loan Amount ($)") 
 
 
 ```
@@ -532,14 +533,14 @@ Employed and Self employed are the ones who are taking higher loans
 
 ```{r echo=FALSE, Term_And_LoanOriginalAmount, warning=FALSE, message=FALSE}
 ggplot(data=prosperLoanData, aes(x=Term,y=LoanOriginalAmount))+ geom_boxplot() +
-labs(x = "Term (Months)", y = "Original Loan Amount") 
+labs(x = "Term (Months)", y = "Original Loan Amount ($)") 
 ```
 
 Higher Loans Amounts are repaid thorough longer terms
 
 ```{r echo=FALSE, Term_And_BorrowerRate, message=FALSE, warning=FALSE}
 ggplot(data=prosperLoanData, aes(x=Term,y=BorrowerRate))+ geom_boxplot()+
-  labs(x = "Term (Months)", y = "Borrower Rate") +
+  labs(x = "Term (Months)", y = "Borrower Rate (%)") +
   ggtitle("Term and Borrower Rate")
 ```
 
@@ -579,20 +580,26 @@ strong positive correlation with a correlation coefficient of 0.46
 # Multivariate Plots Section
 
 ```{r echo=FALSE, MVP_1, warning=FALSE, fig.width=17, fig.height=12.5}
+prosperLoanData_credit_score_na_omitted <-
+  na.omit(prosperLoanData$CreditScoreRangeLower)
+firstQuantile <- 
+  quantile(prosperLoanData_credit_score_na_omitted, 0.5)
 
-
-ggplot(data=prosperLoanData, 
+ggplot(data=subset(prosperLoanData, prosperLoanData$CreditScoreRangeLower> 
+                     firstQuantile), 
        aes(x=LoanOriginalAmount, y=BorrowerRate, color=CreditScoreRangeLower)) +
-  geom_jitter(alpha=0.15, position='jitter') + 
-  scale_colour_gradient(low="blue", high="red") + 
-  ggtitle("Loan Amount by Credit Score and Interest Rate") +
-  labs(x = "Loan Original Amount", y = "Borrower Rate") 
-
+  geom_point(alpha=0.5, position='jitter') + 
+  scale_colour_gradient(low="yellow", high="red") + 
+  ggtitle("Loan Amount by Credit Score and Interest Rate")+
+  labs (x = "Loan Original Amount ($)", y = "Borrower Rate (%)")
 
 ```
 
 The top left ones are the ones which takes loans for a smaller amount and at 
-higher rates. These are the borrowers with lower credit scores
+higher rates. These are the borrowers with lower credit scores. The borrowers
+with higher credit scores (red colored) gets higher amount of loans at lower 
+rates. (Only values corresponding to the first quartile are plotted for better 
+visualisation purposes)
 
 
 ```{r echo=FALSE, MVP_2, message=FALSE, warning=FALSE}
@@ -624,14 +631,77 @@ Most of the borrowers seem to have DI ratio of 0.2 to 0.3 and is showing an
 uptick in the most recent years. Borrowers with income range $100k + have a
 low DI ratio and is around 0.15-0.20 
 
+```{r echo=FALSE, Plot_One, message=FALSE,warning=FALSE}
+ggplot(data=subset(prosperLoanData, prosperLoanData$CreditScoreRangeLower > 660)
+, aes(x=BorrowerRate, y=LoanOriginalAmount, color=CreditScoreRangeLower)) +  
+  geom_point(alpha=0.1, position='jitter') +
+  scale_colour_gradient(low="blue", high="red") +
+  ggtitle("Loan Amount by Credit Score and Interest Rate") +
+  labs(x = "Borrower Rate (%)", y = "Loan Original Amount ($)")+
+  facet_wrap(~LoanYear)
+```
+
+(For better visualisation, only credit scores from the first quartile are 
+plotted here)
+
+The above plot shows how the lending platform Prosper has matured over years. 
+Red shows higher credit scores. We can see that by the year 2014, blue 
+dominates,which would also mean that the over all risk exposure has increased.
+That is loans are given out to borrowers with lower credit scores at a higher 
+rate. If we take a look at the chart for 2012, we can see that those days, 
+higher amount of loans were released mainly for borrowers with high credit 
+scores.
+
+
+
+```{r echo=FALSE, Plot_Two, message=FALSE, warning=FALSE}
+ggplot(data=subset(prosperLoanData, prosperLoanData$DebtToIncomeRatio < .4 ), 
+       aes(x=BorrowerRate, y=LoanOriginalAmount, 
+           color=DebtToIncomeRatio)) +geom_point(alpha=0.1, 
+                                  position='jitter') +facet_wrap(~LoanYear) + 
+      scale_colour_gradient(low="green", high="red") +
+      ggtitle("Loan Amount by DI Ratio and Interest Rate") +xlim( 0, 0.4) +
+  labs(x="Borrower Rate(%)", y = "Loan Original Amount ($)")
+
+
+
+```
+
+
+Again, this plot says that as the prosper lending platform matures, probably the
+risk management also has improved. In the earlier years red (high debt to income
+ratio) is almost not seen in the charts. In the later years, we can observe that 
+loans are disbursed to borrowers with high debt to income ratio as well & hence 
+dominance of the red color in the charts as the years are passing by. 
+
+
+```{r echo=FALSE, Plot_Three}
+delin <- prosperLoanData[grep("Past Due", prosperLoanData$LoanStatus),] 
+# only delinquent
+
+ggplot(data=subset(delin, delin$IncomeRange != '$0'), 
+       aes(y=LoanYear, x=LoanStatus)) +geom_point(aes(color=LoanStatus),size=3, 
+      alpha=0.5, position='jitter') +
+  facet_wrap(~IncomeRange) +ggtitle("Delinquent loan exposure summary") +
+  scale_colour_brewer(type="div", 
+                                  palette="Dark2") +scale_x_discrete(labels="")
+
+```
+
+
+Only deliquent loans were subsetted here. The majority of the delinquencies are 
+clustered in 1-15days past due. Maximum delinqueny is happening for the 
+borrowers having income ranges between $25k-50k and $50-75k.
+
+
 # Multivariate Analysis
 
 ### Talk about some of the relationships you observed in this part of the \
 investigation. Were there features that strengthened each other in terms of \
 looking at your feature(s) of interest?
 
-Borrowers with lower credit scores takes loans for a smaller amount, however at 
-a higher interest rate
+Borrowers with lower credit scores takes loans for a smaller amount & the loans 
+are at disbursed to them at a higher interest rate
 
 Also, it was observed that borrowers with the highest income have a lower 
 percentage of debt. 
@@ -645,70 +715,75 @@ strengths and limitations of your model.
 
 ------
 
+
+
+
 # Final Plots and Summary
 
-> **Tip**: You've done a lot of exploration and have built up an understanding
-of the structure of and relationships between the variables in your dataset.
-Here, you will select three plots from all of your previous exploration to
-present here as a summary of some of your most interesting findings. Make sure
-that you have refined your selected plots for good titling, axis labels (with
-units), and good aesthetic choices (e.g. color, transparency). After each plot,
-make sure you justify why you chose each plot by describing what it shows.
-
 ### Plot One
-```{r echo=FALSE, Plot_One, message=FALSE,warning=FALSE}
-ggplot(data=subset(prosperLoanData, prosperLoanData$CreditScoreRangeLower > 660)
-, aes(x=BorrowerRate, y=LoanOriginalAmount, color=CreditScoreRangeLower)) +  
-  geom_point(alpha=0.1, position='jitter') +
-  scale_colour_gradient(low="blue", high="red") +
-  ggtitle("Loan Amount by Credit Score and Interest Rate") +
-  facet_wrap(~LoanYear)
+
+```{r echo=FALSE, MVP_1_a, warning=FALSE, fig.width=17, fig.height=12.5}
+ggplot(data=subset(prosperLoanData, prosperLoanData$CreditScoreRangeLower> 
+                     firstQuantile), 
+       aes(x=LoanOriginalAmount, y=BorrowerRate, color=CreditScoreRangeLower)) +
+  geom_point(alpha=0.5, position='jitter') + 
+  scale_colour_gradient(low="yellow", high="red") + 
+  ggtitle("Loan Amount by Credit Score and Interest Rate")+
+  labs (x = "Loan Original Amount ($)", y = "Borrower Rate (%)")
+
 ```
 
 ### Description One
-The above plot shows how the lending platform Prosper has matured over years. 
+
+The color red represents the borrowers with a high credit scores. They opt for 
+higher amount of loans and the rates at which the loans are taken are lower 
+for them as compared to the ones with lower credit scores. 
+
+### Plot Two
+```{r echo=FALSE, Plot_One_a, message=FALSE,warning=FALSE}
+ggplot(data=subset(prosperLoanData, prosperLoanData$CreditScoreRangeLower > 660)
+, aes(y=BorrowerRate, x=LoanOriginalAmount, color=CreditScoreRangeLower)) +  
+  geom_point(alpha=0.1, position='jitter') +
+  scale_colour_gradient(low="blue", high="red") +
+  ggtitle("Loan Amount by Credit Score and Interest Rate") +
+  labs(x = "Loan Original Amount ($)", y = "Borrower Rate (%)")+
+  facet_wrap(~LoanYear)
+```
+
+### Description Two
+The above plot shows how the lending platform Prosper has matured over years. \
+This chart digs deeper into plot one and splits the data across years.  
 Red shows higher credit scores and we can see that by the year 2014, blue 
-dominates,which would also mean that the over all risk exposure has increased. 
+dominates higher loan amount section (> 20000 USD),which would also mean that 
+the over all risk exposure has increased and the lending platform is now giving 
+out higher amout of loans to borrowers with lower credit scores as well & to 
+cover the risk probably,they are being charged a higher interest rate. 
+
 (For better visualisation, only credit scores from the first quartile are 
 plotted here)
 
-### Plot Two
-```{r echo=FALSE, Plot_Two, message=FALSE, warning=FALSE}
+### Plot Three
+```{r echo=FALSE, Plot_Two_a, message=FALSE, warning=FALSE}
 ggplot(data=subset(prosperLoanData, prosperLoanData$DebtToIncomeRatio < .4 ), 
        aes(x=BorrowerRate, y=LoanOriginalAmount, 
            color=DebtToIncomeRatio)) +geom_point(alpha=0.1, 
                                   position='jitter') +facet_wrap(~LoanYear) + 
       scale_colour_gradient(low="green", high="red") +
-      ggtitle("Loan Amount by DI Ratio and Interest Rate") +xlim( 0, 0.4)
+      ggtitle("Loan Amount by DI Ratio and Interest Rate") +xlim( 0, 0.4) +
+  labs(x="Borrower Rate (%)", y = "Loan Original Amount ($)")
 
 
-
-```
-
-### Description Two
-
-As the prosper lending platform matures, probably the risk management also has
-improved. This could be the reason, the borrower rates are decreasing for larger 
-loans, mainly for those with lower debt to income ratio.  
-
-### Plot Three
-```{r echo=FALSE, Plot_Three}
-delin <- prosperLoanData[grep("Past Due", prosperLoanData$LoanStatus),] 
-# only delinquent
-
-ggplot(data=subset(delin, delin$IncomeRange != '$0'), 
-       aes(y=LoanYear, x=LoanStatus)) +geom_point(aes(color=LoanStatus),size=3, 
-      alpha=0.5, position='jitter') +
-  facet_wrap(~IncomeRange) +ggtitle("Delinquent loan exposure 
-                        summary") +scale_colour_brewer(type="div", 
-                                  palette="Dark2") +scale_x_discrete(labels="")
 
 ```
 
 ### Description Three
-Only deliquent loans were subsetted here. The majority of the delinquencies are 
-clustered in 1-15days past due. Maximum delinqueny is happening for the 
-borrowers having income ranges between $25k-50k and $50-75k.
+
+This plot reinforces the above finding that the risk management strategies has 
+been worked upon at Prosper as the platform matured. This could be the reason
+that unlike the earlier years, a good percentage of laons are disbursed for 
+borrowers with high debt to income ratio. 
+
+
 
 ------
 
@@ -731,11 +806,14 @@ Regression models & some predictions are what I would have tried working on if
 time permitted.  For example, preclosure, delinquency, late payment etc if it 
 can be predicted, it would have been good. 
 
-One of the good decisions was to restrict the analysis to limited variables and 
-not look into the entire data to perform the analysis. This helped finish the 
+One of the good decisions was to restrict the analysis to limited number of 
+variables and not look into the entire data to perform the analysis. 
+This helped finish the 
 analysis comparitively faster. 
 
 # References
 https://rpubs.com/yugoli/UdacityP3
+https://github.com/yugoli/UdacityP3
+
 
 
