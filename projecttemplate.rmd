@@ -138,7 +138,7 @@ is less than 0.5 for a good percentage of pepole.
 ```{r echo=FALSE, Univariate_Plots_20, warning=FALSE, message=FALSE}
 ggplot(aes(x=StatedMonthlyIncome),data=prosperLoanData)+geom_histogram()+
   ggtitle("Histogram for Stated Monthly Income")+xlim(0,20000) +
-  labs(x = "Staged monthly income ($)", y = "Count")
+  labs(x = "Stated monthly income ($)", y = "Count")
 
 
 StatedMonthlyIncomeMean <- mean(prosperLoanData$StatedMonthlyIncome)
@@ -370,7 +370,7 @@ which expected that these values are discrete.
 
 # Bivariate Analysis
 
-```{r echo=FALSE, Bivariate_Plots_CurrentCreditLines_And_Total_Monthly_Debt, warning=FALSE, message=FALSE}
+```{r echo=FALSE, CreditLines_Total_Monthly_Debt, warning=FALSE, message=FALSE}
 ggplot(aes(x=CurrentCreditLines, y=MonthlyDebtTotal),data=prosperLoanData) +
   labs(x = "Current Credit Lines", y = "Monthly Debt Total") +
   geom_point(alpha=0.5,position="jitter")+xlim(0,30)+ylim(0,10000)
@@ -385,7 +385,7 @@ There is a clear positive correlation between Current CreditLines and the Total
 Monthly Debt and the value of the correlation coeffient is 0.47.
 
 
-```{r echo=FALSE, Bivariate_Plots_CreditScoreRange_And_BorrowerRate, warning=FALSE, message=FALSE}
+```{r echo=FALSE,CreditScoreRange__BorrowerRate, warning=FALSE, message=FALSE}
 ggplot(aes(x=CreditScoreRangeLower, y=BorrowerRate),data=prosperLoanData)+
   labs(x = "Credit Score Range (Lower)", y = "Borrower Rate") +
   geom_point(alpha=0.1,position="jitter")+
@@ -401,7 +401,7 @@ rate. The correlation coefficient is -0.46. Persons with a lower credit scores
 get the loans at a lower borrower rate. 
 
 
-```{r echo=FALSE, Bivariate_Plots_MonthlyIncome_And_TotalMonthlyDebt, warning=FALSE, message=FALSE}
+```{r echo=FALSE,MonthlyIncome_TotalMonthlyDebt, warning=FALSE, message=FALSE}
 ggplot(aes(x=StatedMonthlyIncome, y=MonthlyDebtTotal),data=prosperLoanData)+
   labs(x = "Stated Monthly Income", y = "Monthly Debt Total") +
   geom_point(alpha=0.1,position="jitter")+
@@ -417,7 +417,7 @@ monthly debt. The correlation coefficient is 0.36.
 
 
 
-```{r echo=FALSE, Bivariate_Plots_LoanOriginalAmount_And_BorrowerRate, warning=FALSE, message=FALSE}
+```{r echo=FALSE, LoanAmount_And_BorrowerRate, warning=FALSE, message=FALSE}
 ggplot(aes(x=LoanOriginalAmount, y=BorrowerRate),data=prosperLoanData)+
   labs(x = "Original Loan Amount", y = "Borrower Rate") +
   geom_point(alpha=0.1,position="jitter",size=1)+
@@ -433,11 +433,11 @@ of the correlation coeffient is -0.32. This would mean that the higher loans are
 disbursed at a lower interest rate. 
 
 
-```{r echo=FALSE, Bivariate_Plots_LoanOriginalAmount_And_CreditScoreRangeLower, warning=FALSE, message=FALSE}
+```{r echo=FALSE, LoanAmount_CreditScoreLower, warning=FALSE, message=FALSE}
 ggplot(aes(x=LoanOriginalAmount, y=CreditScoreRangeLower),data=prosperLoanData)+
   labs(x = "Original Loan Amount", y = "Credit Score Range (Lower)") +
   geom_point(alpha=0.1,position="jitter")+
-  ggtitle("LoanOriginalAmount And CreditScoreRangeLower")#+ xlim(0,15000)+ylim(0,6500)
+  ggtitle("LoanOriginalAmount And CreditScoreRangeLower")
   corCoef = cor.test(prosperLoanData$LoanOriginalAmount,
                      prosperLoanData$CreditScoreRangeLower,method="pearson")
  
@@ -447,7 +447,7 @@ There is a slight positive correlation between loan Amount and Credit Scores.
 Higher the loans, the credit scores can increase. 
 
 
-```{r echo=FALSE, Bivariate_Plots_StatedMonthlyIncome_And_TotalMontlyDebt, warning=FALSE, message=FALSE}
+```{r echo=FALSE, MonthlyIncome_TotalMontlyDebt, warning=FALSE, message=FALSE}
 p1<-ggplot(aes(x=StatedMonthlyIncome, y=MonthlyDebtTotal),data=prosperLoanData)+
   labs(x = "Stated Monthly Income", y = "Total Monthly Debt") +
   geom_point(alpha=0.025,position="jitter")+
@@ -465,7 +465,7 @@ the non home owners, the dispersion is concentrated more amoung the borrowers
 with an income of around 5000. 
 
 
-```{r echo=FALSE, Bivariate_Plots_LoanYear_And_LoanOriginalAmount, warning=FALSE, message=FALSE}
+```{r echo=FALSE, LoanYear_And_LoanOriginalAmount, warning=FALSE, message=FALSE}
 ggplot(data=prosperLoanData, aes(x=LoanYear,y=LoanOriginalAmount)) + 
   labs(x = "Year", y = "Original Loan Amount") +
   geom_boxplot()+
@@ -479,7 +479,7 @@ The median amount dips in 2009 and has a sharp rise in 2013.
 
 
 
-```{r echo=FALSE, Bivariate_Plots_LoanMonth_And_LoanOriginalAmount, warning=FALSE, message=FALSE}
+```{r echo=FALSE, LoanMonth_LoanOriginalAmount, warning=FALSE, message=FALSE}
 ggplot(data=prosperLoanData, aes(x=LoanYear,y=LoanOriginalAmount))+ 
   labs(x = "Year", y = "Original Loan Amount") +
   geom_boxplot()+
@@ -495,7 +495,7 @@ ggplot(data=prosperLoanData, aes(x=LoanMonth, y=LoanOriginalAmount)) +
 
 Dec to Feb is the period when the loan amounts are usually higher. 
 
-```{r echo=FALSE, Bivariate_Plots_ListingCategory_And_LoanOriginalAmount, fig.width=15, fig.height=12.5, warning=FALSE, message=FALSE}
+```{r echo=FALSE,Cat_Amt, fig.width=15,fig.height=12.5, warning=FALSE}
 ggplot(data=prosperLoanData, aes(x=ListingCategory..numeric.,
                                  y=LoanOriginalAmount, 
                    fill=ListingCategory..numeric.)) + 
@@ -506,7 +506,7 @@ ggplot(data=prosperLoanData, aes(x=ListingCategory..numeric.,
 
 The higher amount loans are taken for Debt consolidation and baby and adoption
 
-```{r echo=FALSE, Bivariate_Plots_IncomeRange_And_LoanOriginalAmount, warning=FALSE, message=FALSE}
+```{r echo=FALSE, IncomeRange_And_LoanAmount, warning=FALSE, message=FALSE}
 ggplot(data=prosperLoanData, aes(x=IncomeRange,y=LoanOriginalAmount, 
                                  color=IncomeRange))+
   labs(x = "Income Range", y = "Original Loan Amount") +
@@ -517,10 +517,11 @@ ggplot(data=prosperLoanData, aes(x=IncomeRange,y=LoanOriginalAmount,
 Borrowers with large incomes take large loan.
 
 
-```{r echo=FALSE, Bivariate_Plots_Employment_Status_And_LoanOriginalAmount, warning=FALSE, message=FALSE}
+```{r echo=FALSE, Employment_Status_LoanAmount, warning=FALSE, message=FALSE}
 ggplot(data=subset(prosperLoanData, prosperLoanData$EmploymentStatus!=""), 
        aes(x=EmploymentStatus, y=LoanOriginalAmount, color=EmploymentStatus)) +
-  geom_boxplot() + scale_x_discrete(labels="")+ggtitle("Employment Status and Loan Amount") +
+  geom_boxplot() + scale_x_discrete(labels="")+
+  ggtitle("Employment Status and Loan Amount") +
   labs(x = "Employment Status", y = "Original Loan Amount") 
 
 
@@ -529,7 +530,7 @@ ggplot(data=subset(prosperLoanData, prosperLoanData$EmploymentStatus!=""),
 Employed and Self employed are the ones who are taking higher loans
 
 
-```{r echo=FALSE, Bivariate_Plots_Term_And_LoanOriginalAmount, warning=FALSE, message=FALSE}
+```{r echo=FALSE, Term_And_LoanOriginalAmount, warning=FALSE, message=FALSE}
 ggplot(data=prosperLoanData, aes(x=Term,y=LoanOriginalAmount))+ geom_boxplot() +
 labs(x = "Term (Months)", y = "Original Loan Amount") 
 ```
@@ -577,7 +578,7 @@ strong positive correlation with a correlation coefficient of 0.46
 
 # Multivariate Plots Section
 
-```{r echo=FALSE, Scores_Amount_BorrowerRate, message=FALSE, warning=FALSE, fig.width=17, fig.height=12.5}
+```{r echo=FALSE, MVP_1, warning=FALSE, fig.width=17, fig.height=12.5}
 
 
 ggplot(data=prosperLoanData, 
@@ -656,7 +657,12 @@ make sure you justify why you chose each plot by describing what it shows.
 
 ### Plot One
 ```{r echo=FALSE, Plot_One, message=FALSE,warning=FALSE}
-ggplot(data=subset(prosperLoanData, prosperLoanData$CreditScoreRangeLower > 660), aes(x=BorrowerRate, y=LoanOriginalAmount, color=CreditScoreRangeLower)) +geom_point(alpha=0.1, position='jitter') + scale_colour_gradient(low="blue", high="red") +ggtitle("Loan Amount by Credit Score and Interest Rate") +facet_wrap(~LoanYear)
+ggplot(data=subset(prosperLoanData, prosperLoanData$CreditScoreRangeLower > 660)
+, aes(x=BorrowerRate, y=LoanOriginalAmount, color=CreditScoreRangeLower)) +  
+  geom_point(alpha=0.1, position='jitter') +
+  scale_colour_gradient(low="blue", high="red") +
+  ggtitle("Loan Amount by Credit Score and Interest Rate") +
+  facet_wrap(~LoanYear)
 ```
 
 ### Description One
